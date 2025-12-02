@@ -1,6 +1,6 @@
 <?php
-$vnos = fopen("day2_e.txt", "r") or die("Unable to open file!");
-$podatki = fread($vnos,filesize("day2_e.txt"));
+$vnos = fopen("day2.txt", "r") or die("Unable to open file!");
+$podatki = fread($vnos,filesize("day2.txt"));
 fclose($vnos);
 $podatki = trim($podatki);
 $ids = preg_split("/,/", $podatki);
@@ -10,7 +10,7 @@ foreach($ids as $id) {
 	for($i = $x; $i <= $y; $i++) {
 		$st = strval($i);
 		if(strlen($st) >=2) {
-			$half = floor(strlen($st)/2);
+			$half = ceil(strlen($st)/2);
 			if($half % 2 == 0 || $half % 3 == 0 || $half % 4 == 0 || $half % 5 == 0 || $half % 6 == 0) {
 				if(substr($st, 0, $half) == substr($st, $half)) {
 					$numbers[] = $i;
@@ -25,4 +25,3 @@ foreach($ids as $id) {
 	}
 }
 echo 'part 1:'.(array_sum($numbers));
-
