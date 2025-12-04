@@ -8,55 +8,33 @@ function premikanje($y, $x, $vrstice) {
 	$np = 0;
 	$maxY = count($vrstice);
 	$maxX = strlen($vrstice[0]);
-	//gor
-	if($y > 0) {
-		if($vrstice[$y-1][$x] == "@") {
-			$np++;
-		}
+	$premiki = [
+		//gor
+		[-1, 0], 
+		//dol
+		[1, 0],
+		//levo
+		[0, -1], 
+		//desno
+		[0, 1],
+		//diagonala gor levo
+		[-1,-1], 
+		//diagonala gor desno
+		[-1,1], 
+		//diagonala dol levo
+		[1,-1], 
+		//diagonala dol desno
+		[1,1]
+	];
+	foreach ($premiki as [$dy, $dx]) {
+	    $ny = $y + $dy;
+	    $nx = $x + $dx;
+	    if ($ny >= 0 && $ny < $maxY && $nx >= 0 && $nx < $maxX -1) {
+	        if ($vrstice[$ny][$nx] == "@") {
+	        	$np++;
+	        }
+	    }
 	}
-	//dol
-	if($y+1 < $maxY) {
-		if($vrstice[$y+1][$x] == "@") {
-			$np++;
-		}
-	}
-	//levo
-	if($x > 0) {
-		if($vrstice[$y][$x-1] == "@") {
-			$np++;
-		}
-	}
-	//desno
-	if($x+1 < $maxX -1) {
-		if($vrstice[$y][$x+1] == "@") {
-			$np++;
-		}
-	}
-	//diagonala levo gor
-	if($y > 0 && $x > 0) {
-		if($vrstice[$y-1][$x-1] == "@") {
-			$np++;
-		}
-	}
-	//diagonala desno gor
-	if($y > 0 && $x+1 < $maxX) {
-		if($vrstice[$y-1][$x+1] == "@") {
-			$np++;
-		}
-	}
-	//diagonala levo dol
-	if($y+1 < $maxY && $x > 0) {
-		if($vrstice[$y+1][$x-1] == "@") {
-			$np++;
-		}
-	}
-	//diagonala desno dol
-	if($y+1 < $maxY && $x+1 < $maxX -1) {
-		if($vrstice[$y+1][$x+1] == "@") {
-			$np++;
-		}
-	}
-
 	return ($np < 4 ) ? true : false;
 }
 function menjaj($vrstice) {
@@ -111,7 +89,7 @@ while(true) {
 	$vrstice = $grid["grid"];
 	$skupaj2 += $grid["sum"];
 }
-echo 'part 1:'.$skupaj;
+echo 'part 1:'.$skupaj.'<br/>';
 echo 'part 2:'.$skupaj2;
 
 //VISUALIZATION
@@ -119,5 +97,4 @@ $mreza = implode('', $vrstice);
 echo '<pre>';
 echo $mreza;
 echo '</pre>';
-
 ?>
