@@ -12,12 +12,10 @@ foreach($vrstice as $vrstica) {
 }
 $dVrstice = preg_split("/\n/", $data);
 $skupaj = $skupaj2 = 0;
-$validRange = [];
 foreach($dVrstice as $vrstica) {
 	foreach($ranges as [$start, $end]) {
 		if(intval($vrstica) >= $start && intval($vrstica) <= $end) {
 			$skupaj++;
-			$validRange[] = [$start, $end];
 			break;
 		}
 	}
