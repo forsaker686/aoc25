@@ -18,11 +18,11 @@ for($i =1;  $i < count($vrstice); $i++) {
 		if($a < 0 || $a >= count($vrstice)){
 			continue;
 		}
-		$celica = $vrstice[$i][$a];
 		if($vrstice[$i][$a] == '^') {
 			$splits++;
 			if($a-1 >= 0) {
 				$novi[] = $a-1;
+				
 			}
 			if($a+1 < count($vrstice)) {
 				$novi[] = $a+1;
@@ -37,4 +37,38 @@ for($i =1;  $i < count($vrstice); $i++) {
 	}
 	$aktivni = array_values(array_unique($novi));
 }
-echo 'part 1: '.$splits;
+
+echo 'part 1:'.$splits;
+
+//part 2
+$aktivni = [ $zacetna => 1 ];
+$splits2 = 0;
+for($i =1;  $i < count($vrstice); $i++) {
+	$novi = [];
+	foreach($aktivni as $a => $stej) {
+		if($a < 0 || $a >= strlen($vrstice[$i])){
+			continue;
+		}
+		if($vrstice[$i][$a] == '^') {
+			if($a-1 >= 0) {
+				$novi[$a-1] = (isset($novi[$a-1]) ? bcadd($novi[$a-1], $stej) : $stej);
+			}
+			if($a+1 < strlen($vrstice[$i])) {
+				$novi[$a+1] = (isset($novi[$a+1]) ? bcadd($novi[$a+1], $stej) : $stej);
+			}
+		}else {
+			$novi[$a] = (isset($novi[$a]) ? bcadd($novi[$a], $stej) : $stej);
+		}
+	}
+	if(count($novi) === 0) {
+		$aktivni = [];
+		break;
+	}
+	$aktivni = $novi;
+}
+
+foreach ($aktivni as $v) { 
+	$splits2 = bcadd($splits2, (string)$v); 
+}
+
+echo 'part 2: '.$splits2;
