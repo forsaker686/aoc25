@@ -6,7 +6,8 @@ $podatki = trim($podatki);
 $vrstice = preg_split("/\n/", $podatki);
 $skupaj = 0;
 $poti = [];
-$rezultati = $rezultati2 [];
+$rezultati = $rezultati2 = [];
+//part 1 function
 function isci($device, $pot, $graf) {
 	global $rezultati;
 	foreach($graf[$device] as $output) {
@@ -22,34 +23,32 @@ function isci($device, $pot, $graf) {
         isci($output, $next, $graf);
 	}
 }
+//part 2 function
+function isci2($device, $videlDac = 0,  $videlFft = 0) {
+	global $poti;
+	static $cache = [];
+
+	if($device == 'out') {
+		return $videlDac && $videlFft;
+	}
+	$key = "$device,$videlDac,$videlFft";
+	if(isset($cache[$key])) {
+		return $cache[$key];
+	}
+	$rezultat = 0;
+	foreach($poti[$device] as $output) {
+		$rezultat += isci2($output, $videlDac || $output == 'dac', $videlFft || $output == 'fft');
+	}
+	return $cache[$key] = $rezultat;
+}
 foreach($vrstice as $vrstica) {
 	[$device, $list] = explode (':', $vrstica);
 	$list = explode(' ', trim($list));
 	$poti[$device] = $list;
 }
+
 isci('you', ['you'], $poti);
 echo 'part 1:'.count($rezultati);
-
-//part 2 - wokrs on example, too much time for real input
-function isci2($device, $pot, $graf, $videlDac = false, $videlFft = false) {
-	global $rezultati2;
-    if ($device === 'dac') $videlDac = true;
-    if ($device === 'fft') $videlFft = true;
-	foreach($graf[$device] as $output) {
-		if($output == 'out') {
-            if ($videlDac && $videlFft) {
-                $rezultati2[] = array_merge($pot, ['out']);
-            }
-            continue;
-		}
-		if(in_array($output, $pot)) {
-			continue;
-		}
-			$pot[] = $output;
-			isci2($output, $pot, $graf, $videlDac, $videlFft);
-			array_pop($pot);
-	}
-}
-isci2('svr', ['svr'], $poti);
-
-echo 'part 2:'.count($rezultati2);
+echo '<br/>';
+$part2 = isci2("svr");
+echo 'part 2:'.$part2;
